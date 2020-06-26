@@ -1,0 +1,30 @@
+{
+  "name": "budgethelper",
+  "version": "1.0.0",
+  "description": "Help with tracking your daily spending",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikaLeppiaho/BudgetHelper.git"
+  },
+  "author": "Mika Leppiaho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MikaLeppiaho/BudgetHelper/issues"
+  },
+  "homepage": "https://github.com/MikaLeppiaho/BudgetHelper#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.20"
+  }
+}
