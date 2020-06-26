@@ -3,13 +3,13 @@ var Schema = mongoose.Schema
 
 
 
-budgetSetting = new Schema({
+budgetSettingSchema = new Schema({
     income: Number,
     savings: Number,
     
 })
 
-budgetSetting.set('toJSON', {
+budgetSettingSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
@@ -18,4 +18,4 @@ budgetSetting.set('toJSON', {
 })
 
 
-module.exports = mongoose.model('BudgetSetting', budgetSetting)
+module.exports = mongoose.model('BudgetSetting', budgetSettingSchema)

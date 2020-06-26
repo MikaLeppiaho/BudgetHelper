@@ -3,5 +3,5 @@ content-type: application/json
 
 {
     "income": 2200,
-    "savings": 0.20
+    "savings": 20
 }
