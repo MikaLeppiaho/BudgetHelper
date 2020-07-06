@@ -1,15 +1,25 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose')
+/*TODO 
+1. Estä uusien asetusten luominen
+2. Mahdollisuus päivittää asetuksia
+*/
 
-
-
-budgetSettingSchema = new Schema({
+const budgetSetting = new mongoose.Schema({
     income: Number,
     savings: Number,
-    
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    expenses: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Expense'
+        }
+    ]
 })
 
-budgetSettingSchema.set('toJSON', {
+budgetSetting.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
@@ -18,4 +28,4 @@ budgetSettingSchema.set('toJSON', {
 })
 
 
-module.exports = mongoose.model('BudgetSetting', budgetSettingSchema)
+module.exports = mongoose.model('BudgetSetting', budgetSetting)
