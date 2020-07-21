@@ -7,6 +7,13 @@ const DailyBudget = require('../models/dailybudget')
 
 const tools = require('../utils/tools')
 
+expensesRouter.get('/', async (request, response, next) => {
+    const settings = await Expense.find({})
+    response.json(settings.map(s => s.toJSON())) 
+})
+
+
+//Lisää uusi kuukausittainen meno 
 expensesRouter.post('/', async (request, response, next ) => {
     const body = request.body
 
@@ -15,51 +22,25 @@ expensesRouter.post('/', async (request, response, next ) => {
         return response.status(401).json({ error: 'token missing or invalid' })
     }
 
-    const budgetSetting = await BudgetSetting.findOne({user:decodedToken.id})
-
-    console.log("budgetSetting", budgetSetting)
-    const newExpense = new Expense({
-        description: body.description,
-        amount: body.amount,
-        budgetSetting: budgetSetting._id
-    })
     try{
+        //lisää kuukausittainen summa tietokantaan ja linkitä se käyttäjän budgetSettings malliin. 
+        const budgetSetting = await BudgetSetting.findOne({user:decodedToken.id})
+
+        const newExpense = new Expense({
+            description: body.description,
+            amount: body.amount,
+            budgetSetting: budgetSetting._id
+        })
+        
         const savedExpenses = await newExpense.save()
         budgetSetting.expenses = budgetSetting.expenses.concat(newExpense._id)
         await budgetSetting.save()
 
-        //Päivitä kuukauden budgetit
-        const dailyBudget = await DailyBudget.find({ date: tools.todaysDate() })
-        const budgetExpenses = await BudgetSetting.findOne({user:decodedToken.id}).populate('expenses',{amount:1})
-        
-        console.log("dailyBudget: ", dailyBudget)
-        console.log("budgetExpenses: ", budgetExpenses.expenses)
-        
-        const totalExpenses = budgetExpenses.expenses.reduce(
-            (accumulator, currentValue) => accumulator + currentValue.amount, 0
-        )
-        console.log('Total Expenses',totalExpenses)
-       
-        console.log('Settings', budgetExpenses)
-        const daysLeft = tools.daysToEndOfMonth(new Date())
-
-        //Luo jäljellä olevalle kuukaudelle uusi päivittäinen käyttömäärä
-        for(i = 0; i < daysLeft; i++){
-
-            const dailyBudget ={
-                dailyBudget: ((budgetExpenses.income - totalExpenses) / daysLeft).toFixed(2)
-            }
-
-        const updateDailyBudget = await DailyBudget.findOneAndUpdate({
-            date: tools.incrementDateToEndOfMonth(i, tools.todaysDate())},
-            dailyBudget,
-            {new: true, useFindAndModify: false}
-        )
-
-        const updatedDaily = await DailyBudget.findOne({date: tools.incrementDateToEndOfMonth(i, tools.todaysDate())})
-        console.log('Daily Budget: ', updatedDaily)
-    }
-
+        const expensesByBudgetSetting = await Expense.find({budgetSetting: budgetSetting.id})
+        console.log("expensesByBudgetSetting:", expensesByBudgetSetting)
+        const initialValue = 0
+        const totalExpenses = expensesByBudgetSetting.reduce( (acc, cur) => acc + cur.amount, initialValue)
+        console.log("totalExpenses: ", totalExpenses)
         response.json(savedExpenses.toJSON())
     } catch (e) {
         next(e)

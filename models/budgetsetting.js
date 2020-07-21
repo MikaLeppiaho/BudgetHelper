@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const budgetSetting = new mongoose.Schema({
     income: Number,
     savings: Number,
+    dailyBudget: Number,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 
 mongoose.set('useFindAndModify', false)
 
+//Hakee käyttäjän päivittäisen budgetin
 dailyBudgetRouter.get('/', async (request, response) => {
 
     try {
@@ -42,6 +43,5 @@ dailyBudgetRouter.put('/:id', async (request, response) => {
 
     response.json(updateDailyBudget)
 })
-
 
 module.exports = dailyBudgetRouter

@@ -16,7 +16,7 @@ budgetSettingsRouter.get('/', async (request, response) => {
     response.json(settings.map(s => s.toJSON())) 
 })
 //
-//Poist käyttäjän budgettiasetukset
+//Poista käyttäjän budgettiasetukset
 //
 budgetSettingsRouter.delete('/', async (request, response) => {
     const settings = await BudgetSetting.deleteMany({})
@@ -26,7 +26,7 @@ budgetSettingsRouter.delete('/', async (request, response) => {
 })
 
 //
-//Hae käyttäjän budgettiasetukset
+//Hae käyttäjän budgettiasetukset id parametrillä
 //
 budgetSettingsRouter.get('/:id', async (request, response) => {
     const id = request.params.id
@@ -35,56 +35,38 @@ budgetSettingsRouter.get('/:id', async (request, response) => {
     response.json(settings)
 })
 
-//
-//Lisää budgetti asetus. Lisäksi endpoint lisää kuluvalle kuukauden jäljelläoleville
+
+//Lisää budgettiasetus. Lisäksi endpoint lisää kuluvalle kuukauden jäljelläoleville
 //päiville käytettävissä olevan budgettimäärän. Määrää päivitetään säännöllisten menojen päivittyess
 //ja TODO listalla vähentää käyttäjän syöttämän päivän rahakulujen mukaan
+//TODO Tarkista, että ei tule lisättyä uutta budgettiasetusta, jos semmoinen jo löytyy!
 
 budgetSettingsRouter.post('/', async (request, response, next) => {
     const body = request.body
-//Tarkistetaan käyttäjä tokenin avulla
-    console.log('RequestToken: ', request.token)
+
+    //Tarkistetaan käyttäjä tokenin avulla
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
     if (!request.token || !decodedToken.id) {
         return response.status(401).json({ error: 'token missing or invalid' })
     }
-    console.log('Decoded id: ', decodedToken.id)
-    const user = await User.findById(decodedToken.id)
-    console.log("Awaited user:", user)
 
-
-    const budgetSetting  = new BudgetSetting({
-        income: body.income,
-        savings: body.savings,
-        user: user._id
-    })
+   const user = await User.findById(decodedToken.id)
 
     try {
+
+        // uuden budgettiasetuksen objekti
+        const budgetSetting  = new BudgetSetting({
+            income: body.income,
+            savings: body.savings,
+            dailyBudget: ((body.income - (body.income*body.savings))/30).toFixed(2),
+            user: decodedToken.id
+        })
+
         //Luodaan budgetti asetus ja linkataan se käyttäjän kanssa. 
         const savedBudgetSetting = await budgetSetting.save()
         user.budgetSettings = budgetSetting._id
         await user.save()
-
-        const settings = await BudgetSetting
-        .findOne({user: user._id})
-       
-        console.log('Settings', settings)
-        const daysLeft = tools.daysToEndOfMonth(tools.todaysDate())
-
-        //Luo jäljellä olevalle kuukaudelle uusi päivittäinen käyttömäärä
-        for(i = 0; i < daysLeft; i++){
-
-            const dailyBudget = new DailyBudget({
-                date:  tools.incrementDateToEndOfMonth(i,tools.todaysDate()),
-                dailyBudget: (settings.income / daysLeft).toFixed(2),
-                user: user._id
-            })
-
-        const savedDailyBudget = await dailyBudget.save()
-        await user.save()
-
-        console.log('Daily Budget: ', dailyBudget.toString())
-    }
+        
         response.json(savedBudgetSetting.toJSON())
 
     }catch (e) {
