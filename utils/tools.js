@@ -1,35 +1,33 @@
-
 const daysToEndOfMonth = (date) => {
-    const lastOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() 
-    const daysBetween = lastOfMonth - date.getDate()
+  const lastOfMonth = new Date(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    0
+  ).getDate()
+  const daysBetween = lastOfMonth - date.getDate()
 
-    return daysBetween
+  return daysBetween
 }
 
 const incrementDateToEndOfMonth = (i, date) => {
-    
-    console.log("Increment", date)
-    date.setDate(date.getDate() + i)
-    
-    return date
+  console.log('Increment', date)
+  date.setDate(date.getDate() + i)
+
+  return date
 }
 
-const todaysDate = () => {
-    //Päivitetään aika UTC +2 aikavyöhykkeelle sopimaan Suomen kellolle
-    const timezonedDate = new Date()
-    timezonedDate.setHours(24)
-    timezonedDate.setMinutes(0)
-    timezonedDate.setSeconds(0)
-    timezonedDate.setMilliseconds(0)
+//Funktio ottaa vastaan päivämääräobjektin ja muokkaa siitä kellonajallisesti saman kuin mistä se on luotu.
+const todaysDate = (timezonedDate) => {
+  //Päivitetään aika UTC +2 aikavyöhykkeelle sopimaan Suomen kellolle
+  timezonedDate.setHours(24)
+  timezonedDate.setMinutes(0)
+  timezonedDate.setSeconds(0)
+  timezonedDate.setMilliseconds(0)
 
-    return timezonedDate
-   
-
+  return timezonedDate
 }
 module.exports = {
-    daysToEndOfMonth,
-    incrementDateToEndOfMonth,
-    todaysDate
+  daysToEndOfMonth,
+  incrementDateToEndOfMonth,
+  todaysDate
 }
-
-
