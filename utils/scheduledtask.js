@@ -16,15 +16,6 @@ const newBudget = (users) => {
   return remaining.length ? newBudget(remaining) : console.log('Done')
 }
 
-const calcTotalExpenses = (settings) => {
-  return settings.expenses.reduce((acc, cur) => acc + cur.amount, 0)
-}
-const calcDailyBudget = (settings, totalExpenses) => {
-  return (
-    (settings.income - settings.income * settings.savings - totalExpenses) / 30
-  )
-}
-
 const createBudgetForUser = async (user) => {
   const settings = await BudgetSetting.findOne({
     user: user
@@ -32,29 +23,31 @@ const createBudgetForUser = async (user) => {
     description: 1,
     amount: 1
   })
-  const dailyBudgetResponse = new DailyBudget({
-    date: tools.todaysDate(new Date()),
-    dailyBudget: parseFloat(
-      calcDailyBudget(settings, calcTotalExpenses(settings)).toFixed(2)
-    ),
-    user: user
-  })
+  if (
+    !(await DailyBudget.findOne({
+      user: decodedToken.id,
+      date: tools.todaysDate(new Date())
+    }))
+  ) {
+    const dailyBudgetResponse = new DailyBudget({
+      date: tools.todaysDate(new Date()),
+      user: user
+    })
 
-  dailyBudgetResponse.save()
-  return dailyBudgetResponse
+    dailyBudgetResponse.save()
+    return dailyBudgetResponse
+  }
 }
 
 var job = new CronJob(
   '1 1 1 * * *',
   async () => {
-    console.log('You will see this message every ten second')
     const users = (await User.find({})).map((user) => user.id)
-
     newBudget(users)
   },
   null,
   true,
-  'America/Los_Angeles'
+  'Europe/Helsinki'
 )
 
 module.exports = job

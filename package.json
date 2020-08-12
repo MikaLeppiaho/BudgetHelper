@@ -4,6 +4,7 @@
   "description": "Help with tracking your daily spending",
   "main": "index.js",
   "scripts": {
+    "start": "cross-env index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development nodemon index.js"
   },
