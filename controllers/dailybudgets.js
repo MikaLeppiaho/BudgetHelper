@@ -11,12 +11,15 @@ mongoose.set('useFindAndModify', false)
 dailyBudgetRouter.get('/', async (request, response) => {
   console.log('trying to get daily budget!')
   try {
+    console.log('1')
     //Middlewaren kautta lisätään request parametriin käyttäjän token.
+    console.log(request.token, process.env.SECRET)
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    console.log(decodedToken)
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'Token missing or invalid' })
     }
-
+    console.log('2')
     //Tarkistetaan onko käyttäjälle tallentunut päivittäinen budgetti vai tarvitaanko uusi
     if (
       !(await DailyBudget.findOne({
@@ -29,7 +32,7 @@ dailyBudgetRouter.get('/', async (request, response) => {
         date: tools.todaysDate(new Date()),
         user: decodedToken.id
       })
-
+      console.log('3')
       newDailyBudget.save()
     }
 
