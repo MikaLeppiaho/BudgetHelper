@@ -1,22 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.7868d4b3.chunk.css",
-    "main.js": "/static/js/main.c9734ce1.chunk.js",
-    "main.js.map": "/static/js/main.c9734ce1.chunk.js.map",
+    "main.css": "/static/css/main.68326cf2.chunk.css",
+    "main.js": "/static/js/main.fb278810.chunk.js",
+    "main.js.map": "/static/js/main.fb278810.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.d2e0b102.js",
     "runtime-main.js.map": "/static/js/runtime-main.d2e0b102.js.map",
-    "static/js/2.43711aa4.chunk.js": "/static/js/2.43711aa4.chunk.js",
-    "static/js/2.43711aa4.chunk.js.map": "/static/js/2.43711aa4.chunk.js.map",
+    "static/js/2.c1befc67.chunk.js": "/static/js/2.c1befc67.chunk.js",
+    "static/js/2.c1befc67.chunk.js.map": "/static/js/2.c1befc67.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.74d89be7392bc43b4bf62345ef3203a5.js": "/precache-manifest.74d89be7392bc43b4bf62345ef3203a5.js",
+    "precache-manifest.a571133705ded846167283d2d9db0614.js": "/precache-manifest.a571133705ded846167283d2d9db0614.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.7868d4b3.chunk.css.map": "/static/css/main.7868d4b3.chunk.css.map",
-    "static/js/2.43711aa4.chunk.js.LICENSE.txt": "/static/js/2.43711aa4.chunk.js.LICENSE.txt"
+    "static/css/main.68326cf2.chunk.css.map": "/static/css/main.68326cf2.chunk.css.map",
+    "static/js/2.c1befc67.chunk.js.LICENSE.txt": "/static/js/2.c1befc67.chunk.js.LICENSE.txt",
+    "static/media/Home.css": "/static/media/northfolk.804e0f28.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.d2e0b102.js",
-    "static/js/2.43711aa4.chunk.js",
-    "static/css/main.7868d4b3.chunk.css",
-    "static/js/main.c9734ce1.chunk.js"
+    "static/js/2.c1befc67.chunk.js",
+    "static/css/main.68326cf2.chunk.css",
+    "static/js/main.fb278810.chunk.js"
   ]
 }
