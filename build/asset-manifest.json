@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d0976ae5.chunk.css",
+    "main.js": "/static/js/main.6307c26f.chunk.js",
+    "main.js.map": "/static/js/main.6307c26f.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.d2e0b102.js",
+    "runtime-main.js.map": "/static/js/runtime-main.d2e0b102.js.map",
+    "static/js/2.8483b3c5.chunk.js": "/static/js/2.8483b3c5.chunk.js",
+    "static/js/2.8483b3c5.chunk.js.map": "/static/js/2.8483b3c5.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.3d19f09dea5d09f70080aeb4553ea046.js": "/precache-manifest.3d19f09dea5d09f70080aeb4553ea046.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.d0976ae5.chunk.css.map": "/static/css/main.d0976ae5.chunk.css.map",
+    "static/js/2.8483b3c5.chunk.js.LICENSE.txt": "/static/js/2.8483b3c5.chunk.js.LICENSE.txt",
+    "static/media/Home.css": "/static/media/northfolk.804e0f28.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d2e0b102.js",
+    "static/js/2.8483b3c5.chunk.js",
+    "static/css/main.d0976ae5.chunk.css",
+    "static/js/main.6307c26f.chunk.js"
+  ]
+}
