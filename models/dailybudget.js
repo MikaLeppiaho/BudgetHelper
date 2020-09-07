@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const dailyBudget = new mongoose.Schema({
   date: Date,
-  dailyExpenses: [Number],
+  dailyExpenses: [{ category: { type: String }, amount: { type: Number } }],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

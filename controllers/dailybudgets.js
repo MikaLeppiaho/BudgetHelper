@@ -11,15 +11,13 @@ mongoose.set('useFindAndModify', false)
 dailyBudgetRouter.get('/', async (request, response) => {
   console.log('trying to get daily budget!')
   try {
-    console.log('1')
     //Middlewaren kautta lisätään request parametriin käyttäjän token.
-    console.log(request.token, process.env.SECRET)
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
     console.log(decodedToken)
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'Token missing or invalid' })
     }
-    console.log('2')
+
     //Tarkistetaan onko käyttäjälle tallentunut päivittäinen budgetti vai tarvitaanko uusi
     if (
       !(await DailyBudget.findOne({
@@ -27,17 +25,12 @@ dailyBudgetRouter.get('/', async (request, response) => {
         date: tools.todaysDate(new Date())
       }))
     ) {
-      console.log('new daily!')
       const newDailyBudget = new DailyBudget({
         date: tools.todaysDate(new Date()),
         user: decodedToken.id
       })
-      console.log('3')
       newDailyBudget.save()
     }
-
-    console.log(decodedToken)
-    console.log('Today is: ', tools.todaysDate(new Date()))
 
     const budgetSettings = await BudgetSetting.findOne({
       user: decodedToken.id
@@ -48,11 +41,6 @@ dailyBudgetRouter.get('/', async (request, response) => {
       date: tools.todaysDate(new Date())
     })
 
-    console.log(budgetSettings)
-    /*const dailyBudget = await DailyBudget.findOne({
-      user: decodedToken.id
-    })*/
-
     const calcDailyBudget = (budgetSettings) => {
       let initialExpenses = 0
       const totalExpenses = budgetSettings.expenses.reduce(
@@ -62,10 +50,9 @@ dailyBudgetRouter.get('/', async (request, response) => {
 
       let initialDailyExpenses = 0
       const totalDailyExpenses = dailyExpenses.dailyExpenses.reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
+        (accumulator, currentValue) => accumulator + currentValue.amount,
         initialDailyExpenses
       )
-      console.log(totalDailyExpenses)
 
       const dailyBudget =
         (budgetSettings.income -
@@ -73,11 +60,11 @@ dailyBudgetRouter.get('/', async (request, response) => {
           totalExpenses) /
           30 -
         totalDailyExpenses
-      return dailyBudget.toFixed(2)
+      return dailyBudget
     }
 
     const returnedDailyBudget = {
-      dailyBudget: calcDailyBudget(budgetSettings)
+      dailyBudget: Number(calcDailyBudget(budgetSettings).toFixed(2))
     }
 
     response.json(returnedDailyBudget)
@@ -101,13 +88,12 @@ dailyBudgetRouter.put('/:id', async (request, response) => {
       user: decodedToken.id,
       date: tools.todaysDate(new Date())
     },
-    { $push: { dailyExpenses: [body.dailyBudget] } }
+    {
+      $push: {
+        dailyExpenses: [{ category: body.category, amount: body.dailyBudget }]
+      }
+    }
   )
-  console.log(decodedToken.id)
-  //Lisätään cronjobin luomaan tauluun päiväkohtaisesti uusi, päivän aikana tehty kulu
-  console.log(tools.todaysDate(new Date()))
-  console.log('daily: ', body.dailyBudget)
-  //const response = await DailyBudget.updateOne({})
 
   response.json(body)
 })

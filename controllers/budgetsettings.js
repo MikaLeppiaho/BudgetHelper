@@ -16,17 +16,18 @@ budgetSettingsRouter.get('/', async (request, response) => {
   if (!request.token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
-  try {
-    console.log('Decoded token: ', JSON.stringify(decodedToken))
-    const settings = await BudgetSetting.findOne({
-      user: decodedToken.id
-    }).populate('expenses', {
-      description: 1,
-      amount: 1
-    })
+  console.log('Decoded token: ', JSON.stringify(decodedToken))
+  const settings = await BudgetSetting.findOne({
+    user: decodedToken.id
+  }).populate('expenses', {
+    description: 1,
+    amount: 1
+  })
+  console.log('This is the GET response: ', settings)
+  if (!settings) {
+    response.json('haloo?')
+  } else {
     response.json(settings)
-  } catch (err) {
-    console.log('error fetching settings', err)
   }
 })
 
@@ -91,7 +92,6 @@ budgetSettingsRouter.post('/', async (request, response, next) => {
       savedBudgetSetting = await doc.save()
     }
 
-    //user.budgetSettings = budgetSetting._id
     await user.save()
 
     response.json(savedBudgetSetting.toJSON())
