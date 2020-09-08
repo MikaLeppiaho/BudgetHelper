@@ -10,7 +10,6 @@ const daysToEndOfMonth = (date) => {
 }
 
 const incrementDateToEndOfMonth = (i, date) => {
-  console.log('Increment', date)
   date.setDate(date.getDate() + i)
 
   return date

@@ -39,7 +39,6 @@ expensesRouter.post('/', async (request, response, next) => {
     const expensesByBudgetSetting = await Expense.find({
       budgetSetting: budgetSetting.id
     })
-    console.log('expensesByBudgetSetting:', expensesByBudgetSetting)
 
     const initialValue = 0
     const totalExpenses = (
@@ -49,7 +48,6 @@ expensesRouter.post('/', async (request, response, next) => {
       ) / 30
     ).toFixed(2)
 
-    console.log('totalExpenses: ', totalExpenses)
     budgetSetting.dailyBudget =
       (budgetSetting.income - budgetSetting.savings * budgetSetting.income) /
         30 -
@@ -66,10 +64,8 @@ expensesRouter.post('/', async (request, response, next) => {
 expensesRouter.delete('/:id', async (request, response) => {
   try {
     const result = await Expense.findByIdAndRemove(request.params.id)
-    console.log('Delete result:', result)
     response.status(204).end()
   } catch (err) {
-    console.log('error')
     response.status(500).end()
   }
 })

@@ -16,14 +16,12 @@ budgetSettingsRouter.get('/', async (request, response) => {
   if (!request.token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
   }
-  console.log('Decoded token: ', JSON.stringify(decodedToken))
   const settings = await BudgetSetting.findOne({
     user: decodedToken.id
   }).populate('expenses', {
     description: 1,
     amount: 1
   })
-  console.log('This is the GET response: ', settings)
   if (!settings) {
     response.json('haloo?')
   } else {
@@ -46,7 +44,6 @@ budgetSettingsRouter.delete('/', async (request, response) => {
 //
 budgetSettingsRouter.get('/:id', async (request, response) => {
   const id = request.params.id
-  console.log('id: ', id)
   const settings = await BudgetSetting.findOne({
     user: id
   }).populate('expenses', { description: 1, amount: 1 })
@@ -67,7 +64,6 @@ budgetSettingsRouter.post('/', async (request, response, next) => {
     const doc = await BudgetSetting.findOne({ user: decodedToken.id })
     let savedBudgetSetting = {}
     if (!doc) {
-      console.log('new budget!')
       // uuden budgettiasetuksen objekti
       const budgetSetting = new BudgetSetting({
         income: body.income,
@@ -81,7 +77,6 @@ budgetSettingsRouter.post('/', async (request, response, next) => {
       //Luodaan budgetti asetus ja linkataan se käyttäjän kanssa.
       savedBudgetSetting = await budgetSetting.save()
     } else {
-      console.log('updating budget!')
       doc.income = body.income
       doc.savings = body.savings
       doc.dailyBudget = (

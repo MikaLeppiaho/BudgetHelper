@@ -9,11 +9,9 @@ mongoose.set('useFindAndModify', false)
 
 //Hakee käyttäjän päivittäisen budgetin
 dailyBudgetRouter.get('/', async (request, response) => {
-  console.log('trying to get daily budget!')
   try {
     //Middlewaren kautta lisätään request parametriin käyttäjän token.
     const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    console.log(decodedToken)
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'Token missing or invalid' })
     }
@@ -69,7 +67,6 @@ dailyBudgetRouter.get('/', async (request, response) => {
 
     response.json(returnedDailyBudget)
   } catch (e) {
-    console.log('failed :S')
     response.json(400)
   }
 })

@@ -26,7 +26,6 @@ usersRouter.post('/', async (request, response) => {
   })
   savedBudgetSetting = await budgetSetting.save()
 
-  console.log('savedUser', savedUser)
   response.json(savedUser)
 })
 

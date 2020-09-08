@@ -13,7 +13,7 @@ const newBudget = (users) => {
   const [first, ...remaining] = users
   createBudgetForUser(first)
 
-  return remaining.length ? newBudget(remaining) : console.log('Done')
+  return newBudget(remaining)
 }
 
 const createBudgetForUser = async (user) => {
